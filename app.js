@@ -68,4 +68,31 @@ app.post('/tarefas', (req, res) => {
     res.status(201).json(novaTarefa)
 })
 //cadastrar uma nova tarefa
+
+function autenticacao(req, res, next) {
+    const autorizado = req.headers['authorization'];
+    if (!autorizado) {
+        return res.status(401).json({ error: "Não foi autorizado!" });
+    }
+    next();}
+
+function validacaoBody(req, res, next) {
+    if (!req.body.titulo) {
+        return res.status(400).json({ error: "O campo título é obrigatório!" });
+    }
+    next();}
+
+function log(req, res, next) {
+    console.log(`${new Date().toISOString()} - ${req.method} - ${req.url} - titulo: "${req.body.titulo}"`);
+    next();}
+
+app.post('/tarefas', [autenticacao, validacaoBody, log],(req, res) => {
+    const novaTarefa = {
+        id: tarefas.length + 1,
+        titulo: req.body.titulo, 
+        concluida: false
+    };
+    tarefas.push(novaTarefa);
+    res.status(201).json(novaTarefa);});
+    
 app.listen(3000);
