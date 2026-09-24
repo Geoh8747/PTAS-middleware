@@ -54,4 +54,12 @@ app.get('/tarefas', (req, res) => {
     res.status(200).json(buscaConcluida)
 });
 
+app.post('/tarefas', (req, res) => {
+    const novaTarefa = {
+        id: tarefas.length + 1,
+        titulo: req.body.titulo, 
+        concluida: false  }
+    tarefas.push(novaTarefa)
+    res.status(201).json(novaTarefa)
+});
 app.listen(3000);
