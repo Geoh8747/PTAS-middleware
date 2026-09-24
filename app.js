@@ -28,3 +28,17 @@ const tarefas=
 app.get('/tarefas', (req,res) => {
     res.status(200).json(tarefas)
 });
+
+app.get('/tarefas/:id', (req, res) => {
+    const { id } = req.params
+    const buscaId = tarefas.find( p => p.id === Number(id))
+
+    if (!buscaId) {
+        return res.status(404).json(
+            {error: "tarefa não foi encontrada."})
+    }
+
+    res.status(200).json(buscaId)
+})
+
+app.listen(3000)
