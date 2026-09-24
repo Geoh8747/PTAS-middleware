@@ -31,14 +31,27 @@ app.get('/tarefas', (req,res) => {
 
 app.get('/tarefas/:id', (req, res) => {
     const { id } = req.params
-    const buscaId = tarefas.find( p => p.id === Number(id))
+    const buscaId = tarefas.find( p => p.id === Number(id));
 
     if (!buscaId) {
         return res.status(404).json(
-            {error: "tarefa não foi encontrada."})
+            {error: "tarefa não foi encontrada."});
     }
 
-    res.status(200).json(buscaId)
-})
+    res.status(200).json(buscaId);
+});
 
-app.listen(3000)
+app.get('/tarefas', (req, res) => {
+    const { concluida } = req.query
+    if (concluida === undefined) {
+        return res.status(200).json(tarefas)};
+
+    const buscaConcluida = tarefas.filter(p => p.concluida === (concluida === 'true'));
+
+    if (buscaConcluida.length === 0) {
+        return res.status(404).json(
+            {error: "tarefas não encontradas"})}
+    res.status(200).json(buscaConcluida)
+});
+
+app.listen(3000);
